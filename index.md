@@ -5,7 +5,7 @@ description: Home Page
 hide: true
 ---
 
-My journey starts here.
+My journey starts here. ✧*･ヽ(◕ヮ◕ヽ)
 
 My name is Elise. 
 

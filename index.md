@@ -15,3 +15,5 @@ I also like elephants. Yay! :D
 
 <img src="./images/ShinyDitto.png" alt="Ditto is the best!" width="400"> 
 <img src="./images/DynamaxVaporeon.png" alt="Ditto is the best!" width="400">
+
+![ditto :)](https://assets.pokemon.com/assets/cms2/img/pokedex/full//132.png)

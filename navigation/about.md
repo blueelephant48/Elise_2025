@@ -17,3 +17,5 @@ Hello, there! My name is Elise! Here are some (not so) interesting facts about m
 - I play a lot of video games
 
 - I have a little sister
+
+<img src="{{site.baseurl}}/images/Flute.png" alt="Flute" width="400">

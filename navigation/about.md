@@ -18,4 +18,8 @@ Hello, there! My name is Elise! Here are some (not so) interesting facts about m
 
 - I have a little sister
 
-<img src="{{site.baseurl}}/images/Flute.png" alt="Flute" width="400">
+<img src="{{site.baseurl}}/images/Flute.png" alt="Flute" width="200">
+![OOTM logo](https://odysseyofthemind.com/wp-content/uploads/2024/07/cropped-OOTM.png)
+<img src="{{site.baseurl}}/images/PokemonCard.png" alt="Pokemon card" width="100">
+
+<button><a href="https://www.pokemon.com/us/pokedex/ditto">My favortie Pokemon!</a></button>

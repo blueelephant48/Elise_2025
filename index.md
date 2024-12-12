@@ -11,8 +11,8 @@ My name is Elise. Welcome to my Github page!
 
 I like Pokemon a lot, so you are going to see a lot of that here...
 
-<img src="./images/ShinyDitto.png" alt="Ditto is the best!" width="400"> 
-<img src="./images/DynamaxVaporeon.png" alt="Ditto is the best!" width="400">
+<img src="./images/ShinyDitto.png" alt="Ditto is the best!" width="200"> 
+<img src="./images/DynamaxVaporeon.png" alt="Ditto is the best!" width="200">
 
 ### Useful buttons:
 

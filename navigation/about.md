@@ -4,7 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Hello, there! My name is Elise! Here are some (not so) interesting facts about me!
+### Hello, there! My name is Elise! Here are some (not so) interesting facts about me!
+
+ 
+
+- My favorite color is blue
+
+- I really like elephants
 
 - I have played the flute since 5th grade
 
@@ -17,6 +23,8 @@ Hello, there! My name is Elise! Here are some (not so) interesting facts about m
 - I play a lot of video games
 
 - I have a little sister
+
+- My favorite food is noodles (I like ramen and udon the best)
 
 <img src="{{site.baseurl}}/images/Flute.png" alt="Flute" width="200">
 ![OOTM logo](https://odysseyofthemind.com/wp-content/uploads/2024/07/cropped-OOTM.png)

@@ -26,8 +26,12 @@ permalink: /about/
 
 - My favorite food is noodles (I like ramen and udon the best)
 
+- I have lived in San Diego my entire life
+
 <img src="{{site.baseurl}}/images/Flute.png" alt="Flute" width="200">
 ![OOTM logo](https://odysseyofthemind.com/wp-content/uploads/2024/07/cropped-OOTM.png)
 <img src="{{site.baseurl}}/images/PokemonCard.png" alt="Pokemon card" width="100">
+<img src="{{site.baseurl}}/images/Ramen.png" alt="Ramen" width="150">
+<img src="{{site.baseurl}}/images/SanDiego.png" alt="San Diego Beach" width="150">
 
 <button><a href="https://www.pokemon.com/us/pokedex/ditto">My favortie Pokemon!</a></button>

@@ -100,6 +100,8 @@ permalink: /snake/
                 <label for="speed2">Normal</label>
                 <input id="speed3" type="radio" name="speed" value="35"/>
                 <label for="speed3">Fast</label>
+                <input id="speed4" type="radio" name="speed" value="0"/>
+                <label for="speed4">ExtraFast</label>
             </p>
             <p>Wall:
                 <input id="wallon" type="radio" name="wall" value="1" checked/>

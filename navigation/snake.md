@@ -169,7 +169,7 @@ permalink: /snake/
                     screen_game_over.style.display = "none";
                     break;
                 case SCREEN_GAME_OVER:
-               (0);     screen_snake.style.display = "block";
+                    screen_snake.style.display = "block";
                     screen_menu.style.display = "none";
                     screen_setting.style.display = "none";
                     screen_game_over.style.display = "block";

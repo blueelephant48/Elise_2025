@@ -107,6 +107,12 @@ permalink: /snake/
                 <input id="walloff" type="radio" name="wall" value="0"/>
                 <label for="walloff">Off</label>
             </p>
+            <p>Nearsightedness:
+                <input id="bigscreen" type="radio" name="sight" value="1" checked/>
+                <label for="bigscreen">On</label>
+                <input id="smallscreen" type="radio" name="sight" value="0"/>
+                <label for="smallscreen">Off</label>
+            </p>
         </div>
     </div>
 </div>
@@ -124,6 +130,7 @@ permalink: /snake/
         const ele_score = document.getElementById("score_value");
         const speed_setting = document.getElementsByName("speed");
         const wall_setting = document.getElementsByName("wall");
+        const sight_setting = document.getElementsByName("sight");
         // HTML Screen IDs (div)
         const SCREEN_MENU = -1, SCREEN_GAME_OVER=1, SCREEN_SETTING=2;
         const screen_menu = document.getElementById("menu");
@@ -136,7 +143,7 @@ permalink: /snake/
         const button_setting_menu = document.getElementById("setting_menu");
         const button_setting_menu1 = document.getElementById("setting_menu1");
         // Game Control
-        const BLOCK = 10;   // size of block rendering
+        let BLOCK = 10;   // size of block rendering
         let SCREEN = SCREEN_MENU;
         let snake;
         let snake_dir;
@@ -145,6 +152,7 @@ permalink: /snake/
         let food = {x: 0, y: 0};
         let score;
         let wall;
+        let sight;
         /* Display Control */
         /////////////////////////////////////////////////////////////
         // 0 for the game
@@ -161,7 +169,7 @@ permalink: /snake/
                     screen_game_over.style.display = "none";
                     break;
                 case SCREEN_GAME_OVER:
-                    screen_snake.style.display = "block";
+               (0);     screen_snake.style.display = "block";
                     screen_menu.style.display = "none";
                     screen_setting.style.display = "none";
                     screen_game_over.style.display = "block";
@@ -177,6 +185,7 @@ permalink: /snake/
         /* Actions and Events  */
         /////////////////////////////////////////////////////////////
         window.onload = function(){
+            
             // HTML Events to Functions
             button_new_game.onclick = function(){newGame();};
             button_new_game1.onclick = function(){newGame();};
@@ -201,6 +210,18 @@ permalink: /snake/
                     for(let i = 0; i < wall_setting.length; i++){
                         if(wall_setting[i].checked){
                             setWall(wall_setting[i].value);
+                        }
+                    }
+                });
+            }
+            //sight setting
+            setSight(0);
+            document.getElementById("smallscreen").checked = true;
+            for (let i = 0; i < sight_setting.length; i++) {
+                sight_setting[i].addEventListener("click", function () {
+                    for (let i = 0; i < sight_setting.length; i++) {
+                        if (sight_setting[i].checked) {
+                            setSight(parseInt(sight_setting[i].value));
                         }
                     }
                 });
@@ -250,6 +271,17 @@ permalink: /snake/
                         snake[i].y = snake[i].y - (canvas.height / BLOCK);
                     }
                 }
+            }
+            //Trying to make a canvas bigger for nearsighted people if they press on and want to play without their glasses for some reason
+            
+            for (let i = 0; i < sight_setting.length; i++) {
+                sight_setting[i].addEventListener("click", function () {
+                    for (let i = 0; i < sight_setting.length; i++) {
+                        if (sight_setting[i].checked) {
+                            setSight(parseInt(sight_setting[i].value));
+                        }
+                    }
+                });
             }
             // Snake vs Snake checker
             for(let i = 1; i < snake.length; i++){
@@ -366,5 +398,27 @@ permalink: /snake/
             if(wall === 0){screen_snake.style.borderColor = "#606060";}
             if(wall === 1){screen_snake.style.borderColor = "#FFFFFF";}
         }
+    //sight stuff
+    let setSight = function (sight_value) {
+        sight = sight_value;
+        if (sight === 1) { // Nearsighted (big canvas)
+            canvas.width = 800;
+            canvas.height = 800;
+            BLOCK = 25;
+        } else { // Normal
+            canvas.width = 320;
+            canvas.height = 320;
+            BLOCK = 10;
+        }
+        // Reset game elements to fit the new canvas size
+        resetGameElements();
+    };
+
+    let resetGameElements = function () {
+        // Reinitialize the snake to prevent issues with the new canvas size
+        snake = [{ x: Math.floor(canvas.width / (2 * BLOCK)), y: Math.floor(canvas.height / (2 * BLOCK)) }];
+        addFood(); // Reposition food within the new canvas size
+        altScore(0); // Reset score display
+    };        
     })();
 </script>

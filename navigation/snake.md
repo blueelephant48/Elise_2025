@@ -115,6 +115,12 @@ permalink: /snake/
                 <input id="smallscreen" type="radio" name="sight" value="0"/>
                 <label for="smallscreen">Off</label>
             </p>
+            <p>Camouflage:
+                <input id="hidden" type="radio" name="camo" value="1" checked/>
+                <label for="hidden">On</label>
+                <input id="nothidden" type="radio" name="camo" value="0"/>
+                <label for="nothidden">Off</label>
+            </p>
         </div>
     </div>
 </div>
@@ -133,6 +139,7 @@ permalink: /snake/
         const speed_setting = document.getElementsByName("speed");
         const wall_setting = document.getElementsByName("wall");
         const sight_setting = document.getElementsByName("sight");
+        const camo_setting = document.getElementsByName("camo");
         // HTML Screen IDs (div)
         const SCREEN_MENU = -1, SCREEN_GAME_OVER=1, SCREEN_SETTING=2;
         const screen_menu = document.getElementById("menu");
@@ -155,6 +162,7 @@ permalink: /snake/
         let score;
         let wall;
         let sight;
+        let camo;
         /* Display Control */
         /////////////////////////////////////////////////////////////
         // 0 for the game
@@ -228,6 +236,17 @@ permalink: /snake/
                     }
                 });
             }
+            setCamo(0);
+            document.getElementById("nothidden").checked = true;
+            for (let i = 0; i < camo_setting.length; i++) {
+                camo_setting[i].addEventListener("click", function () {
+                    for (let i = 0; i < camo_setting.length; i++) {
+                        if (camo_setting[i].checked) {
+                            setCamo(parseInt(camo_setting[i].value));
+                        }
+                    }
+                });
+            }
             // activate window events
             window.addEventListener("keydown", function(evt) {
                 // spacebar detected
@@ -281,6 +300,16 @@ permalink: /snake/
                     for (let i = 0; i < sight_setting.length; i++) {
                         if (sight_setting[i].checked) {
                             setSight(parseInt(sight_setting[i].value));
+                        }
+                    }
+                });
+            }
+            //camo?
+            for (let i = 0; i < camo_setting.length; i++) {
+                camo_setting[i].addEventListener("click", function () {
+                    for (let i = 0; i < camo_setting.length; i++) {
+                        if (camo_setting[i].checked) {
+                            setCamo(parseInt(camo_setting[i].value));
                         }
                     }
                 });
@@ -362,7 +391,7 @@ permalink: /snake/
         /* Dot for Food or Snake part */
         /////////////////////////////////////////////////////////////
         let activeDot = function(x, y){
-            ctx.fillStyle = "#FFFFFF";
+            ctx.fillStyle = snakeColor;
             ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
         }
         /* Random food placement */
@@ -415,7 +444,15 @@ permalink: /snake/
         // Reset game elements to fit the new canvas size
         resetGameElements();
     };
-
+    //camo stuff
+    let setCamo = function (camo_value) {
+        camo = camo_value;
+        if (camo === 1) {
+            snakeColor = "#4161e1";
+        } else {
+            snakeColor = "#FFFFFF";
+        }
+    };
     let resetGameElements = function () {
         // Reinitialize the snake to prevent issues with the new canvas size
         snake = [{ x: Math.floor(canvas.width / (2 * BLOCK)), y: Math.floor(canvas.height / (2 * BLOCK)) }];

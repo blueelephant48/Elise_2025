@@ -249,6 +249,9 @@ permalink: /snake/
             }
             // activate window events
             window.addEventListener("keydown", function(evt) {
+                if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft",      "ArrowRight"].includes(evt.code)) {
+                    evt.preventDefault();
+                }
                 // spacebar detected
                 if(evt.code === "Space" && SCREEN !== SCREEN_SNAKE)
                     newGame();
@@ -361,6 +364,7 @@ permalink: /snake/
             addFood();
             // activate canvas event
             canvas.onkeydown = function(evt) {
+                evt.preventDefault();
                 changeDir(evt.keyCode);
             }
             mainLoop();
@@ -425,9 +429,13 @@ permalink: /snake/
         }
         /////////////////////////////////////////////////////////////
         let setWall = function(wall_value){
-            wall = wall_value;
-            if(wall === 0){screen_snake.style.borderColor = "#606060";}
-            if(wall === 1){screen_snake.style.borderColor = "#FFFFFF";}
+            wall = parseInt(wall_value);
+            if(wall === 0){
+                screen_snake.style.borderColor = "#FFFFFF";
+                }
+            if(wall === 1){
+                screen_snake.style.borderColor = "#606060";
+                }
         }
     //sight stuff
     let setSight = function (sight_value) {

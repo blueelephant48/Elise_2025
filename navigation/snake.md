@@ -512,10 +512,12 @@ permalink: /snake/
         if (sight === 1) { // Nearsighted (big canvas)
             canvas.width = 800;
             canvas.height = 800;
+            canvas.style.borderWidth = "25px";
             BLOCK = 25;
         } else { // Normal
             canvas.width = 320;
             canvas.height = 320;
+            canvas.style.borderWidth = "10px";
             BLOCK = 10;
         }
         // Reset game elements to fit the new canvas size

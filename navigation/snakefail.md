@@ -1,7 +1,7 @@
 ---
 layout: base
-title: Snake
-permalink: /snake/
+title: Snakefail
+permalink: /snakefail/
 ---
 
 <style>
@@ -55,7 +55,7 @@ permalink: /snake/
     }
 
     #setting input{
-        display:none;
+        display: inline-block;
     }
 
     #setting label{
@@ -93,6 +93,20 @@ permalink: /snake/
             <p>Settings Screen, press <span style="background-color: #FFFFFF; color: #000000">space</span> to go back to playing</p>
             <a id="new_game2" class="link-alert">new game</a>
             <br>
+            <p>Food:
+                <input id="food_classic" type="radio" name="food" value="classic" checked/>
+                <label for="food_classic">Classic◻️</label>
+                <input id="food_noodles" type="radio" name="food" value="noodles"/>
+                <label for="food_classic">Noodles🍜</label>
+                <input id="food_apple" type="radio" name="food" value="apple"/>
+                <label for="food_classic">Apple🍎</label>
+                <input id="food_candy" type="radio" name="food" value="candy"/>
+                <label for="food_classic">Candy🍬</label>
+                <input id="food_potato" type="radio" name="food" value="potato"/>
+                <label for="food_classic">Potato🥔</label>
+                <!-- <input id="food_random" type="radio" name="food" value="random"/>
+                <label for="food_classic">Random❓</label> -->
+            </p>
             <p>Speed:
                 <input id="speed1" type="radio" name="speed" value="120" checked/>
                 <label for="speed1">Slow</label>
@@ -121,20 +135,6 @@ permalink: /snake/
                 <input id="nothidden" type="radio" name="camo" value="0"/>
                 <label for="nothidden">Off</label>
             </p>
-            <p>Food:
-                <input id="food_classic" type="radio" name="foodType" value="0" checked/>
-                <label for="food_classic">Classic◻️</label>
-                <input id="food_noodles" type="radio" name="foodType" value="1"/>
-                <label for="food_noodles">Noodles🍜</label>
-                <input id="food_apple" type="radio" name="foodType" value="2"/>
-                <label for="food_apple">Apple🍎</label>
-                <input id="food_candy" type="radio" name="foodType" value="3"/>
-                <label for="food_candy">Candy🍬</label>
-                <input id="food_potato" type="radio" name="foodType" value="4"/>
-                <label for="food_potato">Potato🥔</label>
-                <!-- <input id="food_random" type="radio" name="food" value="random"/>
-                <label for="food_classic">Random❓</label> -->
-            </p>
         </div>
     </div>
 </div>
@@ -154,7 +154,7 @@ permalink: /snake/
         const wall_setting = document.getElementsByName("wall");
         const sight_setting = document.getElementsByName("sight");
         const camo_setting = document.getElementsByName("camo");
-        const food_setting = document.getElementsByName("foodType");
+        const food_setting = document.getElementsByName("food");
         // HTML Screen IDs (div)
         const SCREEN_MENU = -1, SCREEN_GAME_OVER=1, SCREEN_SETTING=2;
         const screen_menu = document.getElementById("menu");
@@ -169,18 +169,23 @@ permalink: /snake/
         // Game Control
         let BLOCK = 10;   // size of block rendering
         let SCREEN = SCREEN_MENU;
+        let foodStyle = "classic";
         let snake;
         let snake_dir;
         let snake_next_dir;
         let snake_speed;
-        // let food = {x: 0, y: 0};
-        let foodPosition = {x: 0, y: 0};
-        let foodType = 0;
+        let food = {x: 0, y: 0};
         let score;
         let wall;
         let sight;
         let camo;
-        // let food;
+        let foodClassic = "classic";
+        let foodNoodles = "🍜";
+        let foodApple = "🍎";
+        let foodCandy = "🍬";
+        let foodPotato = "🥔";
+        let snakeColor = "white";
+
         /* Display Control */
         /////////////////////////////////////////////////////////////
         // 0 for the game
@@ -209,7 +214,7 @@ permalink: /snake/
                     screen_game_over.style.display = "none";
                     break;
             }
-        }
+        };
         /* Actions and Events  */
         /////////////////////////////////////////////////////////////
         window.onload = function(){
@@ -220,8 +225,26 @@ permalink: /snake/
             button_new_game2.onclick = function(){newGame();};
             button_setting_menu.onclick = function(){showScreen(SCREEN_SETTING);};
             button_setting_menu1.onclick = function(){showScreen(SCREEN_SETTING);};
+            //food setting
+            setFood("classic");
+            for (let i = 0; i < food_setting.length; i++) {
+                food_setting[i].addEventListener("click", function () {
+                    for (let i = 0; i < food_setting.length; i++) {
+                        if (food_setting[i].checked) {
+                            foodStyle = food_setting[i].value;
+                        }
+                    }
+                });
+            }
+            food_setting.forEach(foodOption => {
+                foodOption.addEventListener("change", function() {
+                    foodStyle = this.value; // Update food style
+                });
+            });
+            
             // speed
             setSnakeSpeed(150);
+            document.getElementById(120).checked = true;
             for(let i = 0; i < speed_setting.length; i++){
                 speed_setting[i].addEventListener("click", function(){
                     for(let i = 0; i < speed_setting.length; i++){
@@ -233,6 +256,7 @@ permalink: /snake/
             }
             // wall setting
             setWall(1);
+            document.getElementById("wallon").checked = true;
             for(let i = 0; i < wall_setting.length; i++){
                 wall_setting[i].addEventListener("click", function(){
                     for(let i = 0; i < wall_setting.length; i++){
@@ -265,37 +289,66 @@ permalink: /snake/
                     }
                 });
             }
-            //food setting stuff
-            setFoodType(0);
-            document.getElementById("food_classic").checked = true;
+            
+            screen_snake.focus();
 
-            // for(let i = 0; i < food_setting.length; i++){
-            //     food_setting[i].addEventListener("click", function(){
-            //         for(let i = 0; i < food_setting.length; i++){
-            //             if(food_setting[i].checked){
-            //                 setFoodType(food_setting[i].value);
-            //             }
-            //         }
-            //     });
-            // }
-            for (let i = 0; i < food_setting.length; i++) {
-                food_setting[i].addEventListener("click", function () {
-                    foodType = parseInt(food_setting[i].value);
-                });
-            }
             // activate window events
             window.addEventListener("keydown", function(evt) {
-                if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft",      "ArrowRight"].includes(evt.code)) {
+                if (SCREEN === SCREEN_SNAKE) {
                     evt.preventDefault();
-                }
+                
                 // spacebar detected
                 if(evt.code === "Space" && SCREEN !== SCREEN_SNAKE)
                     newGame();
+                }
+
+                switch (evt.key) {
+                    case "ArrowUp":
+                        if (snake_dir !== 2) snake_next_dir = 0;
+                        break;
+                    case "ArrowRight":
+                        if (snake_dir !== 3) snake_next_dir = 1;
+                        break;
+                    case "ArrowDown":
+                        if (snake_dir !== 0) snake_next_dir = 2;
+                        break;
+                    case "ArrowLeft":
+                        if (snake_dir !== 1) snake_next_dir = 3;
+                        break;
+                    case "Space":
+                        if(SCREEN !== SCREEN_SNAKE) newGame();
+                        break;
+                }
             }, true);
+            // if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(evt.code)) {
+            //         evt.preventDefault();
+            //     }
+
+            //     if (SCREEN === SCREEN_SNAKE) {
+            //         switch (evt.code) {
+            //             case "ArrowUp":
+            //                 if (snake_dir !== 2) snake_next_dir = 0;
+            //                 break;
+            //             case "ArrowRight":
+            //                 if (snake_dir !== 3) snake_next_dir = 1;
+            //                 break;
+            //             case "ArrowDown":
+            //                 if (snake_dir !== 0) snake_next_dir = 2;
+            //                 break;
+            //             case "ArrowLeft":
+            //                 if (snake_dir !== 1) snake_next_dir = 3;
+            //                 break;
+            //         }
+            //     } else if (evt.code === "Space") {
+            //         // Space starts the game or restarts from other screens
+            //         newGame();
+            //     }
+            // });
         }
         /* Snake is on the Go (Driver Function)  */
         /////////////////////////////////////////////////////////////
         let mainLoop = function(){
+            console.log({snake, snake_dir, SCREEN});
             let _x = snake[0].x;
             let _y = snake[0].y;
             snake_dir = snake_next_dir;   // read async event key
@@ -332,8 +385,13 @@ permalink: /snake/
                     }
                 }
             }
+            //food
+            for (let i = 0; i < food_setting.length; i++) {
+                food_setting[i].addEventListener("change", function () {
+                    foodStyle = this.value; // Updates foodStyle based on the selected input
+                });
+            }
             //Trying to make a canvas bigger for nearsighted people if they press on and want to play without their glasses for some reason
-            
             for (let i = 0; i < sight_setting.length; i++) {
                 sight_setting[i].addEventListener("click", function () {
                     for (let i = 0; i < sight_setting.length; i++) {
@@ -353,22 +411,6 @@ permalink: /snake/
                     }
                 });
             }
-            //food
-
-            // for(let i = 0; i < food_setting.length; i++){
-            //     food_setting[i].addEventListener("click", function(){
-            //         for(let i = 0; i < food_setting.length; i++){
-            //             if(food_setting[i].checked){
-            //                 setFoodType(food_setting[i].value);
-            //             }
-            //         }
-            //     });
-            // }
-            for (let i = 0; i < food_setting.length; i++) {
-                food_setting[i].addEventListener("click", function () {
-                    foodtype = parseInt(food_setting[i].value);
-                });
-            }
             // Snake vs Snake checker
             for(let i = 1; i < snake.length; i++){
                 // Game over test
@@ -378,11 +420,11 @@ permalink: /snake/
                 }
             }
             // Snake eats food checker
-            if(checkBlock(snake[0].x, snake[0].y, foodPosition.x, foodPosition.y)){
+            if(checkBlock(snake[0].x, snake[0].y, food.x, food.y)){
                 snake[snake.length] = {x: snake[0].x, y: snake[0].y};
                 altScore(++score);
                 addFood();
-                activeDot(foodPosition.x, foodPosition.y, true);
+                activeDot(food.x, food.y, true);
             }
             // Repaint canvas
             ctx.beginPath();
@@ -390,10 +432,10 @@ permalink: /snake/
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             // Paint snake
             for(let i = 0; i < snake.length; i++){
-                activeDot(snake[i].x, snake[i].y, false);
+                activeDot(snake[i].x, snake[i].y);
             }
             // Paint food
-            activeDot(foodPosition.x, foodPosition.y, true);
+            activeDot(food.x, food.y);
             // Debug
             //document.getElementById("debug").innerHTML = snake_dir + " " + snake_next_dir + " " + snake[0].x + " " + snake[0].y;
             // Recursive call after speed delay, déjà vu
@@ -409,15 +451,19 @@ permalink: /snake/
             score = 0;
             altScore(score);
             // initial snake
-            snake = [];
-            snake.push({x: 0, y: 15});
+            snake = [{x: 0, y: 15}];
+            snake_dir = 1;
             snake_next_dir = 1;
             // food on canvas
             addFood();
+            // setSnakeSpeed(150);
+            // setWall(1);
             // activate canvas event
             canvas.onkeydown = function(evt) {
                 evt.preventDefault();
                 changeDir(evt.keyCode);
+                // screen_snake_focus();
+                // canvas.focus();
             }
             mainLoop();
         }
@@ -446,40 +492,67 @@ permalink: /snake/
         }
         /* Dot for Food or Snake part */
         /////////////////////////////////////////////////////////////
-        let activeDot = function(x, y, isFood){
-            // ctx.fillStyle = snakeColor;
-            // ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+        let activeDot = function(x, y, isFood = false) {
             const pixelX = x * BLOCK;
             const pixelY = y * BLOCK;
-            console.log("Food Type: " + foodType);
 
             if (isFood) {
-                const foodEmojis = ["◻️", "🍜", "🍎", "🍬", "🥔"]; // List of emojis corresponding to food settings
-                ctx.font = `${BLOCK}px Arial`; // Adjust font size to fit the block
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText(foodEmojis[foodType], pixelX + BLOCK / 2, pixelY + BLOCK / 2); // Draw food emoji
+                switch (foodStyle) {
+                    case "classic":
+                        ctx.fillStyle = snakeColor;
+                        ctx.fillRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
+                        break;
+
+                    case "noodles":
+                        ctx.font = `${BLOCK}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(foodNoodles, pixelX + BLOCK / 2, pixelY + BLOCK / 2);
+                        break;
+
+                    case "apple":
+                        ctx.font = `${BLOCK}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(foodApple, pixelX + BLOCK / 2, pixelY + BLOCK / 2);
+                        break;
+
+                    case "candy":
+                        ctx.font = `${BLOCK}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(foodCandy, pixelX + BLOCK / 2, pixelY + BLOCK / 2);
+                        break;
+
+                    case "potato":
+                        ctx.font = `${BLOCK}px Arial`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(foodPotato, pixelX + BLOCK / 2, pixelY + BLOCK / 2);
+                        break;
+                } 
             } else {
-                ctx.fillStyle = snakeColor; // Snake's color
-                ctx.fillRect(pixelX, pixelY, BLOCK, BLOCK); // Draw snake block
-            }
-        };
+                    ctx.fillStyle = snakeColor;
+                    ctx.fillRect(pixelX, pixelY, BLOCK, BLOCK);
+                }
+            };
+        
         /* Random food placement */
         /////////////////////////////////////////////////////////////
         let addFood = function(){
-            foodPosition.x = Math.floor(Math.random() * ((canvas.width / BLOCK) - 1));
-            foodPosition.y = Math.floor(Math.random() * ((canvas.height / BLOCK) - 1));
+            food.x = Math.floor(Math.random() * ((canvas.width / BLOCK) - 1));
+            food.y = Math.floor(Math.random() * ((canvas.height / BLOCK) - 1));
             for(let i = 0; i < snake.length; i++){
-                if(checkBlock(foodPosition.x, foodPosition.y, snake[i].x, snake[i].y)){
+                if(checkBlock(food.x, food.y, snake[i].x, snake[i].y)){
                     addFood();
                 }
             }
-        }
+        };
         /* Collision Detection */
         /////////////////////////////////////////////////////////////
         let checkBlock = function(x, y, _x, _y){
             return (x === _x && y === _y);
-        }
+        };
         /* Update Score */
         /////////////////////////////////////////////////////////////
         let altScore = function(score_val){
@@ -494,17 +567,14 @@ permalink: /snake/
             snake_speed = speed_value;
         }
         /////////////////////////////////////////////////////////////
-        let setFoodType = function(food_value){
-            foodType = parseInt(food_value);
-        }
         let setWall = function(wall_value){
             wall = parseInt(wall_value);
             if(wall === 0){
                 screen_snake.style.borderColor = "#FFFFFF";
-                }
+            }
             if(wall === 1){
-                screen_snake.style.borderColor = "#606060";
-                }
+                screen_snake.style.borderColor = "#212121";//#606060
+            }
         }
     //sight stuff
     let setSight = function (sight_value) {
